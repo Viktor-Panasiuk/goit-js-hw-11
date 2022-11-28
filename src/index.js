@@ -1,9 +1,12 @@
 import PixabayService from './js/pixabay-service';
+import photoCardTpl from './templates/photocard.hbs';
+
 
 let pixabayServiceObj = null;
 
 const refs = {
     form: document.querySelector('.search__form'),
+    gallary: document.querySelector('.gallery'),
     moreBtn: document.querySelector('.load-more'),
 }
 
@@ -25,20 +28,26 @@ function onFormSubmit(e) {
     //     per_page: 20,
     // }
 
-    // fetch(
-    //     `${URL_API}?key=${KEY_API}&q=${searchText}`
-    // )
-    //     .then(response => response.json())
-    //     .then(result => console.log(result.hits))
-    //     .catch(error => console.dir(error.message))
-
     pixabayServiceObj = new PixabayService(searchText);
 
     pixabayServiceObj.fetchPhoto()
-         .then(result => console.log(result.hits))
-            .catch(error => console.dir(error.message))
+        .then(response => {
+        
+            console.log(response);
+            const result = response.data;
+            console.log(result.total);
+            console.log(result.totalHits);
+            console.log(result.hits);
+            markupRequestPhoto(result.hits);
+
+         })
+            .catch(error => console.log(error.message))
 }
 
 function onMoreBtnClick(e) {
     pixabayServiceObj.fetchPhoto();
+}
+
+function markupRequestPhoto(photos) {
+    refs.gallary.insertAdjacentHTML('beforeend', photoCardTpl({photos}))
 }

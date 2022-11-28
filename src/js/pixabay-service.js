@@ -1,6 +1,7 @@
-const axios = require('axios').default;
+const     axios = require('axios').default;
 
 export default class PixabayService {
+
     static URL_API = 'https://pixabay.com/api/';
     static KEY_API = '31624230-baee54cc291d6db99c89b80ee';
     
@@ -10,15 +11,23 @@ export default class PixabayService {
     }
 
     fetchPhoto() {
-        console.log(this.searchQuery, '   ', this.page);
 
-        return fetch(
-            `${PixabayService.URL_API}?key=${PixabayService.KEY_API}&q=${this.searchQuery}`
-        )
-            .then(response => response.json());
-       
+        const result = axios.get(
+            PixabayService.URL_API,
+            {
+                params: {
+                    key: PixabayService.KEY_API,
+                    q: this.searchQuery,
+                    image_type: 'photo',
+                    orientation: 'horizontal',
+                    safesearch: 'true',
+                    page: this.page,
+                    per_page: 10,
+                }
+            });
 
         this.incrementPage();
+        return result;
     }
 
     incrementPage() {
