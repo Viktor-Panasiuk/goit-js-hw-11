@@ -21,7 +21,7 @@ export default class PixabayService {
                     orientation: 'horizontal',
                     safesearch: 'true',
                     page: this.page,
-                    per_page: 10,
+                    per_page: 40,
                 }
             });
         this.incrementPage();

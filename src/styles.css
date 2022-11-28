@@ -1,3 +1,28 @@
+header {
+    display: flex;
+    justify-content: center;
+
+    padding: 10px;
+    background-color: dodgerblue;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+}
+
+input {
+    height: 30px;
+    width: 250px;
+}
+
+button {
+    height: 30px;
+    min-width: 50px;
+}
+
 .gallery {
     display: flex;
     flex-wrap: wrap;
@@ -7,10 +32,31 @@
 
 .photo-card {
     margin: 10px;
+    border: 1px solid #CCC;
+    border-radius: 5px;
 }
 
 .photo-card img {
-    max-width: 400px;
+    width: 400px;
+    height: 250px;
+    object-fit: cover;
+}
+
+.info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.more {
+    display: flex;
+    justify-content: center;
 }
 
 .hidden {
