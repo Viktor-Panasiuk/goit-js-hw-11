@@ -8,14 +8,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 let pixabayServiceObj = null;
 let totalShow = 0;
 
-const options = {
-    captions: true,
-    captionSelector: 'img',
-    captionType: 'attr',
-    captionsData: 'alt',
-    captionDelay: 250,
-};
-const gallery = new SimpleLightbox('.gallery a', options);
+
 
 const refs = {
     form: document.querySelector('.search__form'),
@@ -46,7 +39,6 @@ function onFormSubmit(e) {
 
 async function fetchPhotoFromAPI(serviceObj) {
     const response = await pixabayServiceObj.fetchPhoto();
-    console.log(response);
     return response;
 }
 
@@ -66,8 +58,6 @@ function markupRequestPhoto(data) {
 
     gallery.refresh();
 
-    console.log('totalHits: ', data.totalHits);
-    console.log('totalShow: ', totalShow);
 
     if (totalShow == data.totalHits) {
         refs.moreBtn.classList.add("hidden");
@@ -80,3 +70,12 @@ function markupReset() {
     refs.moreBtn.classList.add("hidden");
     totalShow = 0;
 }
+
+const options = {
+    captions: true,
+    captionSelector: 'img',
+    captionType: 'attr',
+    captionsData: 'alt',
+    captionDelay: 250,
+};
+const gallery = new SimpleLightbox('.gallery a', options);
