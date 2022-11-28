@@ -1,8 +1,10 @@
 import PixabayService from './js/pixabay-service';
 import photoCardTpl from './templates/photocard.hbs';
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 
 
 let pixabayServiceObj = null;
+let totalShow = 0;
 
 const refs = {
     form: document.querySelector('.search__form'),
@@ -17,37 +19,43 @@ refs.moreBtn.addEventListener('click', onMoreBtnClick);
 function onFormSubmit(e) {
     e.preventDefault();
     const searchText = e.target.elements.searchQuery.value;
-
-    // const option = {
-    //     key: KEY_API,
-    //     method: 'GET',
-    //     lang: 'en',
-    //     q: searchText,
-    //     image_type: 'photo',
-    //     orientation: 'horizontal',
-    //     per_page: 20,
-    // }
+    markupReset();
 
     pixabayServiceObj = new PixabayService(searchText);
-
     pixabayServiceObj.fetchPhoto()
         .then(response => {
-        
-            console.log(response);
-            const result = response.data;
-            console.log(result.total);
-            console.log(result.totalHits);
-            console.log(result.hits);
-            markupRequestPhoto(result.hits);
-
-         })
-            .catch(error => console.log(error.message))
+            if (!response.data.hits.length) {
+                Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+                return;
+            }
+            Notify.info(`Hooray! We found ${response.data.totalHits} images.`);
+            markupRequestPhoto(response.data);
+        });
 }
 
 function onMoreBtnClick(e) {
-    pixabayServiceObj.fetchPhoto();
+    pixabayServiceObj.fetchPhoto()
+        .then(response => {
+            markupRequestPhoto(response.data);
+        });
 }
 
-function markupRequestPhoto(photos) {
-    refs.gallary.insertAdjacentHTML('beforeend', photoCardTpl({photos}))
+function markupRequestPhoto(data) {
+    refs.gallary.insertAdjacentHTML('beforeend', photoCardTpl(data.hits));
+    refs.moreBtn.classList.remove("hidden");
+    totalShow += data.hits.length;
+
+    console.log('totalHits: ', data.totalHits);
+    console.log('totalShow: ', totalShow);
+
+    if (totalShow == data.totalHits) {
+        refs.moreBtn.classList.add("hidden");
+        Notify.failure("We're sorry, but you've reached the end of search results.");
+    }
+}
+
+function markupReset() {
+    refs.gallary.innerHTML = '';
+    refs.moreBtn.classList.add("hidden");
+    totalShow = 0;
 }

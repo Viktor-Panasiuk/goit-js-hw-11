@@ -11,7 +11,6 @@ export default class PixabayService {
     }
 
     fetchPhoto() {
-
         const result = axios.get(
             PixabayService.URL_API,
             {
@@ -25,7 +24,6 @@ export default class PixabayService {
                     per_page: 10,
                 }
             });
-
         this.incrementPage();
         return result;
     }
