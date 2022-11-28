@@ -4,15 +4,16 @@ let pixabayServiceObj = null;
 
 const refs = {
     form: document.querySelector('.search__form'),
+    moreBtn: document.querySelector('.load-more'),
 }
 
 refs.form.addEventListener('submit', onFormSubmit);
+refs.moreBtn.addEventListener('click', onMoreBtnClick);
 
 
 function onFormSubmit(e) {
     e.preventDefault();
     const searchText = e.target.elements.searchQuery.value;
-    console.log(searchText);
 
     // const option = {
     //     key: KEY_API,
@@ -33,5 +34,11 @@ function onFormSubmit(e) {
 
     pixabayServiceObj = new PixabayService(searchText);
 
+    pixabayServiceObj.fetchPhoto()
+         .then(result => console.log(result.hits))
+            .catch(error => console.dir(error.message))
+}
+
+function onMoreBtnClick(e) {
     pixabayServiceObj.fetchPhoto();
 }
